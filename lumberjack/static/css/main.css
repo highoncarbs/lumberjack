@@ -1,0 +1,102 @@
+
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+
+body,html{
+	font-family: 'Inter UI', sans-serif !important;
+	height: 100% !important;
+}
+
+.columns{
+	margin-top: 0 !important; 
+}
+/*Side Navbar*/
+
+.brand-logo{
+	background-color: black;
+	border-radius: 20px;
+	width: 40px;
+	height: 40px;
+	/*margin-left: 30px;*/
+	margin-top: 3px;
+	transform: scale(1);
+	transition: all 0.3s ease-in;
+}
+
+.brand-logo:hover{
+	transform: scale(0.75);
+	transition: all 0.3s ease-in;
+}
+
+.reg-brand{
+	margin-left: 20px !important;
+	margin-top: 33px;
+	}
+
+section{
+margin-bottom: 0 !important;
+}
+.sidenav{
+	font-weight: 600;
+
+}
+.nav{
+
+		border-right: 1px solid lightgrey;
+		margin-left: 20px !important;
+		padding-top: 30px !important;
+		margin-bottom: 0;
+}
+
+.main-content{
+	margin-left: 20px !important;
+	margin-right: 20px !important;
+	padding-top: 33px !important;
+	margin-bottom: 0;	
+}
+
+.menu-btm{
+	
+	padding-bottom: 20px
+}
+.feather{
+	vertical-align: middle;
+	margin-right: 15px;
+}
+
+.menu-text{
+	/*padding-left: 10px;*/
+}
+a{
+	border-radius: 3px !important;
+}
+button{
+		font-family: 'Inter UI', sans-serif !important;
+		font-weight: 600;
+		border-radius: 5px !important;
+		font-size: 20px !important;
+}
+
+/* Forms */
+input[type=text] {
+ 	border: 1px solid lightgrey;
+ 	padding : 10px;
+ 	padding-left: 20px;
+ 	/*box-shadow: none;*/
+ 	background-color: transparent !important;
+ 	transition: 0.2s all ease-in;
+ 	border-radius: 5px;
+ 	width: 100%;
+ }
+
+ .outer{
+ 	width: 90%;
+ }
+
+ input[type=text]:focus {
+ 	border: 1px solid grey;
+ 	
+ 	}

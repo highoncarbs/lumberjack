@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% if subtite %}
+	<title>Lumberjack - {{subtitle}}</title>
+	{% else %}
+	<title>Lumberjack</title>
+	{% endif %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static' , filename = 'css/main.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+ <link rel="stylesheet" href="https://rsms.me/inter/inter-ui.css">	  
+ <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="reg-brand is-size-1">
+		<div class="brand-logo"></div>
+	</div>
+	{% block content%}
+	{% endblock %}
+</body>
+</html>
