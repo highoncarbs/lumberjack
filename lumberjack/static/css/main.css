@@ -9,6 +9,9 @@ body,html{
 	font-family: 'Inter UI', sans-serif !important;
 	height: 100% !important;
 }
+h2{
+	font-weight:700 !important; 
+}
 
 .columns{
 	margin-top: 0 !important; 
@@ -32,10 +35,13 @@ body,html{
 }
 
 .reg-brand{
-	margin-left: 20px !important;
-	margin-top: 33px;
+	padding-left: 32px !important;
 	}
 
+.reg-change{
+	padding-right: 20px !important;
+	text-align: right;
+}
 section{
 margin-bottom: 0 !important;
 }
@@ -47,20 +53,20 @@ margin-bottom: 0 !important;
 
 		border-right: 1px solid lightgrey;
 		margin-left: 20px !important;
-		padding-top: 30px !important;
+		padding-top: 20px !important;
 		margin-bottom: 0;
 }
 
 .main-content{
 	margin-left: 20px !important;
 	margin-right: 20px !important;
-	padding-top: 33px !important;
+	padding-top: 20px !important;
 	margin-bottom: 0;	
 }
 
 .menu-btm{
 	
-	padding-bottom: 20px
+	padding-bottom: 5px
 }
 .feather{
 	vertical-align: middle;
@@ -81,7 +87,7 @@ button{
 }
 
 /* Forms */
-input[type=text] {
+input {
  	border: 1px solid lightgrey;
  	padding : 10px;
  	padding-left: 20px;
@@ -89,14 +95,31 @@ input[type=text] {
  	background-color: transparent !important;
  	transition: 0.2s all ease-in;
  	border-radius: 5px;
- 	width: 100%;
- }
+}
 
- .outer{
- 	width: 90%;
- }
+input:focus{
+border: 1px solid grey;
+}
 
- input[type=text]:focus {
- 	border: 1px solid grey;
- 	
- 	}
+.register{
+/*	padding-top: 100px ;
+*/}
+
+.register input{
+	margin-bottom: 5px !important;
+}
+
+.hero-head{
+	margin-bottom: 100px;
+}
+
+.info{
+	font-weight: 600;
+}
+
+.error-mssg{
+	padding: 20px;
+	background-color: rgba(255, 45, 45, 0.8);
+	border-radius: 4px;
+	color: white;
+}

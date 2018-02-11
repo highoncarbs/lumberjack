@@ -11,7 +11,8 @@
  <link rel="stylesheet" href="https://rsms.me/inter/inter-ui.css">	  
  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css"></head>
 <body>
 	<section class="columns is-fullheight">
 		<aside class="column main-side aside hero is-2 is-fullheight nav">
@@ -19,23 +20,26 @@
 				<div class="brand-logo"></div>
 			</div>
 			<div class="menu sidenav is is-size-4">
-				<ul class="menu-list">
+				<ul class="menu-list animated fadeIn">
 					<li><a href=""><i data-feather="zap"></i><span class="menu-text">Insights</span></a></li>
 					<li><a href=""><i data-feather="alert-octagon"></i><span class="menu-text"><span class="menu-text">Issues</span></a></li>
 					<li><a href=""><i data-feather="bar-chart-2"></i><span class="menu-text">Stream</span></a></li>
 				</ul>
 			</div>
-			<div class="menu-btm is-fixed-bottom">
-				<p class="is-size-4">Hi, Padam!</p>
+			<div class="menu-btm is-fixed-bottom animated fadeIn ">
+				<p class="is-size-4 ">Hi, {{user.title()}}</p>
 				<br>
-				<button class="button is-black is-fullwidth">Logout ?</button>
+				<a href="/logout"><button class="button is-black is-fullwidth ">					    	<i data-feather="log-out"></i>
+Logout</button></a>
 			</div>
 		</aside>
 		<aside class="main-content column is-10 is-fullwidth">
 			<nav class="navbar">
-				<p class="outer">
-					<input type="text"  placeholder="Search Logs">
-				</p>
+				<div class="field" style="width: 100%;">
+  					<p class="control has-icons-left " style="width: 90%;">
+					    <input style="width: 100%;" type="email" placeholder="Search Logs">
+					</p>
+				</div>
 			</nav>
 		</aside>
 	</section>

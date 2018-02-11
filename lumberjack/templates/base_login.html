@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	{% if subtite %}
+	{% if subtitle %}
 	<title>Lumberjack - {{subtitle}}</title>
 	{% else %}
 	<title>Lumberjack</title>
@@ -11,12 +11,30 @@
  <link rel="stylesheet" href="https://rsms.me/inter/inter-ui.css">	  
  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css"></head>
 <body>
-	<div class="reg-brand is-size-1">
-		<div class="brand-logo"></div>
-	</div>
+	<div class="hero">
+	<div class="hero-head">
+
+	<div class="columns">
+		<div class="reg-brand column is-half-mobile">
+			<div class="brand-logo"></div>
+		</div>
+		<div class="reg-change column is-half-mobile">
+			{% if subtitle=="Login" %}
+				<a class="info is-size-6" href="{{ url_for('signup')}}">Signup</a>
+			{% elif subtitle=="Signup" %}
+				<a class="info is-size-6" href="{{ url_for('login')}}">Login</a>
+			{% endif %}
+		</div>
+</div>
+</div>
+</div>
 	{% block content%}
 	{% endblock %}
+	<script>
+      feather.replace()
+    </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 from lumber import *
 
 if __name__ == "__main__":
-    lumber.run(debug= True)
+    db.create_all()
+    lumber.run(debug=True)

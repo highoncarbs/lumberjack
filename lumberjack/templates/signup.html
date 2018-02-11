@@ -1,0 +1,30 @@
+{% extends 'base_login.html' %}
+{% block content %}
+<section class="register">
+<div class="hero-body has-text-centered">
+	<h2 class="is-size-4">Join Lumberjack</h2>
+	<p>A Real time log analysis platform for application.<br>Free Always.</p>
+	<br>
+	<br>
+	<form action="/signup" method="POST">
+		{{ form.hidden_tag()}}
+		{{ form.username(class="ninput" , placeholder="Username")}}<br>
+		{{ form.email(class="ninput" , placeholder="Email")}}<br>
+		{{ form.password(class="ninput" , placeholder = "Password")}}<br>
+		<br>
+		{% if error_mssg %}
+			<span class="is-medium is-size-6 error-mssg">
+				<i data-feather="alert-triangle">error</i>
+				{{ error_mssg }}
+			</span>
+			<br>
+			<br>
+		{% endif %}
+		<button class="button is-black is-size-6"><i data-feather="user"></i>Register</button>
+		<br>
+		<br>
+		<a href="{{ url_for('login')}}">Already registered ? Login</a>
+	</form>
+</div>
+</section>
+{% endblock %}
