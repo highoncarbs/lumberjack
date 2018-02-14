@@ -54,16 +54,18 @@ margin-bottom: 0 !important;
 		border-right: 1px solid lightgrey;
 		margin-left: 20px !important;
 		padding-top: 20px !important;
-		margin-bottom: 0;
+		margin-bottom: 10px !important;
 }
 
 .main-content{
 	margin-left: 20px !important;
 	margin-right: 20px !important;
 	padding-top: 20px !important;
-	margin-bottom: 0;	
 }
 
+.menu-list li{
+	margin-bottom: 10px;
+}
 .menu-btm{
 	
 	padding-bottom: 5px
@@ -76,6 +78,21 @@ margin-bottom: 0 !important;
 .menu-text{
 	/*padding-left: 10px;*/
 }
+
+.active{
+	background-color: rgba(67, 92, 226, 1);
+	border-radius: 5px !important;
+}
+.active a{
+		color: #fff !important;
+}
+
+.active a:hover{
+		color: #fff !important;
+		background-color: rgba(67, 92, 226, 0.8) !important;
+		transition: 0.2s all ease-in !important; 
+}
+
 a{
 	border-radius: 3px !important;
 }
@@ -101,6 +118,20 @@ input:focus{
 border: 1px solid grey;
 }
 
+.input{
+ 	border: 1px solid lightgrey !important;
+ 	/*box-shadow: none;*/
+ 	background-color: transparent !important;
+ 	transition: 0.2s all ease-in;
+ 	border-radius: 5px !important;
+ 	box-shadow: none;
+ 	border: none;
+}
+
+.input:focus{
+	border: 1px solid grey !important;
+}
+}
 .register{
 /*	padding-top: 100px ;
 */}
@@ -122,4 +153,21 @@ border: 1px solid grey;
 	background-color: rgba(255, 45, 45, 0.8);
 	border-radius: 4px;
 	color: white;
+}
+
+.xcontent{
+	margin-top: 50px;
+	margin-right: 15px;
+}
+
+.site{
+		color: grey !important;
+		transition: all 0.1s ease-in;
+
+}
+
+.site:hover{
+		color: black !important;
+
+
 }

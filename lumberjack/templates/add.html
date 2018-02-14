@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content%}
+
+		<a id="showModal" class="is-narrow ">
+		<div class="box">
+			<article class="media">
+				<div class="media-left">
+					<i data-feather="plus-square"></i>
+				</div>
+				<div class="media-left is-size-5">
+					<h2>Add your application.</h2>
+				</div>
+			</article>
+		</div>
+	</a>
+	<br>
+	<br>
+	<div class="list-info">
+		<h2 class="is-size-4 ">My Applications</h2>
+		<br>
+		<table class="table">
+			<tbody class="is-size-4">
+    		<tr>
+    			<th class="has-text-grey-light">1</th>
+    			<td style="font-weight: 600;">gitlog.io</td>
+    			<td>Shortt some name</td>
+
+				<td ><a href="" class="site"><i data-feather="trash"></i></a></td>
+				<td><a href="" class="site"><i data-feather="settings"></i></a>	</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+<!-- 
+<a href=""><button id="showModal" class="button is-medium has-text-centered is-black is-fullwidth animated fadeInUp">					    	<i data-feather="plus-square"></i>
+Add Site</button></a>
+ -->
+<div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content has-text-centered" style="color: white;">
+	<h2 class="is-size-3">Add Site</h2>
+	<p>Add the resource url of your application.Also add the streamign api in the app.</p>
+	<br>
+	<div class="box" >
+		<input style="width:100%;
+	height:10%;
+	/*make input doesnt overflow inside div*/
+	-webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;" type="text" name="name" class="is-fullwidth" placeholder="Enter URL"><br><br>
+		<button class="button is-black is-fullwidth">Add to Sites</button>
+	</div>
+
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
+
+<script>
+	document.querySelector('#showModal').addEventListener('click', function(event) {
+  event.preventDefault();
+  var modal = document.querySelector('.modal');  // assuming you have only 1	
+
+  var html = document.querySelector('html');
+  modal.classList.add('is-active' , 'animated' , 'fadeIn');
+  html.classList.add('is-clipped');
+
+  modal.querySelector('.modal-background').addEventListener('click', function(e) {
+    e.preventDefault();
+    modal.classList.remove('is-active');
+    html.classList.remove('is-clipped');
+  });
+});
+</script>
+
+<script type="text/javascript">
+	      document.getElementById('ad-sec').classList.add("active");
+	     
+</script>
+{% endblock %}

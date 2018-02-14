@@ -6,16 +6,16 @@ from flask_wtf import FlaskForm
 from wtforms import StringField , PasswordField 
 from wtforms.validators import InputRequired , Email , Length
 from werkzeug.security import generate_password_hash , check_password_hash
-# import models.user
 
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy import create_engine
-# import config
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
 
 lumber = Flask(__name__)		
 lumber.config.from_pyfile('config.py')
 
 db = SQLAlchemy(lumber)
+engine = create_engine('mysql+mysqldb://root:alpine@127.0.0.1/maalan' , echo=True)
+Base  = declarative_base()
 
 login_manager = LoginManager()
 login_manager.init_app(lumber)
@@ -45,11 +45,31 @@ def login():
 			return render_template('login.html' ,subtitle = "Login", form = form ,error_mssg = "Invalid Username or Password")	
 	return render_template('login.html' , subtitle = "Login" , form = form , error_mssg = mssg),200
 
-@lumber.route('/dash' ,methods=['GET', 'POST'])
+
+@lumber.route('/add' ,methods=['GET', 'POST'])
 @login_required
-def dash():
+def add():
 	user = current_user.username
-	return user
+	return render_template('add.html' , subtitle = "Add Site" ,  user = user)
+
+@lumber.route('/insights' ,methods=['GET', 'POST'])
+@login_required
+def insights():
+	user = current_user.username
+	return render_template('insights.html' , subtitle = "Insights" ,  user = user)
+
+@lumber.route('/issues' ,methods=['GET', 'POST'])
+@login_required
+def issues():
+	user = current_user.username
+	return render_template('issues.html' , subtitle = "Issues" ,  user = user)
+
+@lumber.route('/stream' ,methods=['GET', 'POST'])
+@login_required
+def stream():
+	user = current_user.username
+	return render_template('stream.html' , subtitle = "Stream" ,  user = user)
+
 
 @lumber.route('/signup' , methods=['GET', 'POST'])
 def signup():
@@ -60,6 +80,8 @@ def signup():
 		if user is None:
 			hashed_pass = generate_password_hash(form.password.data , method='sha256')
 			new_user = User(username = form.username.data , email = form.email.data , password = hashed_pass)
+			user_table = UserTableCreator(form.email.data)
+			Base.metadata.create_all()
 			db.session.add(new_user)
 			db.session.commit()
 			return redirect(url_for('index'))
@@ -70,7 +92,8 @@ def signup():
 
 @lumber.route('/forgot' , methods=['GET', 'POST'])
 def forgot():
-	return render_template('login.html' , subtitle = "Signup"),200
+	return render_template('login.html' , subtitle = "Forgot"),200
+
 
 @lumber.route('/logout')
 @login_required
@@ -103,3 +126,14 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
+
+def UserTableCreator(tablename):
+    class UserTable(Base):
+        __tablename__ = tablename
+        id = db.Column(db.Integer , primary_key = True)
+        site = db.Column(db.String(80) , default = None)
+
+        def __init__(self, site=None):
+            self.site = site
+
+    return UserTable
