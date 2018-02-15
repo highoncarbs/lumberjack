@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content%}
 
-		<a id="showModal" class="is-narrow ">
-		<div class="box">
+		<a id="showModal" href="/addsite" class="is-narrow ">
+		<div class="box animated fadeInUp">
 			<article class="media">
 				<div class="media-left">
 					<i data-feather="plus-square"></i>
@@ -15,7 +15,7 @@
 	</a>
 	<br>
 	<br>
-	<div class="list-info">
+	<div class="list-info animated fadeIn">
 		<h2 class="is-size-4 ">My Applications</h2>
 		<br>
 		<table class="table">
@@ -31,10 +31,8 @@
 			</tbody>
 		</table>
 	</div>
-<!-- 
-<a href=""><button id="showModal" class="button is-medium has-text-centered is-black is-fullwidth animated fadeInUp">					    	<i data-feather="plus-square"></i>
-Add Site</button></a>
- -->
+
+<!-- Pop UP model -->
 <div class="modal">
   <div class="modal-background"></div>
   <div class="modal-content has-text-centered" style="color: white;">
@@ -42,13 +40,27 @@ Add Site</button></a>
 	<p>Add the resource url of your application.Also add the streamign api in the app.</p>
 	<br>
 	<div class="box" >
-		<input style="width:100%;
+		<form action="/addsite" method="POST">
+		{{ form.hidden_tag()}}
+		{{ form.name(class="is-fullwidth" , placeholder="Enter Name")}}
+		<!-- <input style="width:100%;
 	height:10%;
 	/*make input doesnt overflow inside div*/
 	-webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
-            box-sizing: border-box;" type="text" name="name" class="is-fullwidth" placeholder="Enter URL"><br><br>
-		<button class="button is-black is-fullwidth">Add to Sites</button>
+            box-sizing: border-box;" type="text" name="name" class="is-fullwidth" placeholder="Enter URL"> -->
+            <br>
+ 		{% if error_mssg %}
+				<span class="is-white is-size-6 error-mssg">
+					<i data-feather="alert-triangle">error</i>
+					{{ error_mssg }}
+				</span>
+				<br>
+				<br>
+				{% endif %}
+				<br>
+		<button class="button is-black is-fullwidth">Submit</button>
+		</form>
 	</div>
 
   <button class="modal-close is-large" aria-label="close"></button>
