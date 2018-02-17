@@ -19,7 +19,7 @@
 	<section class="columns is-fullheight">
 		<aside class="column main-side aside hero is-2 is-fullheight nav">
 			<div class="brand is-size-1">
-				<div class="brand-logo"></div>
+				<a href="{{url_for('index')}}"><div class="brand-logo"></div></a>
 			</div>
 			<div class="menu sidenav is is-size-4">
 				<ul class="menu-list animated fadeIn">
@@ -31,6 +31,7 @@
 			</div>
 			<div class="menu-btm is-fixed-bottom animated fadeInUp ">
 				<p class="is-size-4 ">Hi, {{user.title()}}</p>
+
 				<br>
 				<a href="/logout"><button class="button is-black is-fullwidth ">					    	<i data-feather="log-out"></i>
 Logout</button></a>

@@ -55,23 +55,27 @@ def login():
 def add():
     user = current_user.username
     form = AddSite()
-    return render_template('add.html', subtitle="Add Site",  user=user , form = form)
-
-
-@lumber.route('/addsite', methods=['GET', 'POST'])
-@login_required
-def add_site():
-    user = current_user.username
-    mssg = "Test Error"
-    form = AddSite()
+    tablename = current_user.email
+    sql = text("select id,site from `"+tablename+"`")
+    result = engine.execute(sql)
     if form.validate_on_submit():
             print("Boom")
             new_site = form.name.data
             tablename = current_user.email
             sql = text("insert into `"+tablename+"` (site) values('"+new_site+"')")
             result =engine.execute(sql)           
-            return render_template('add.html' , subtitle = "Add Site" ,  form = form ,user = user , mssg= " Added Successfully!")
-    return render_template('add.html' , subtitle = "Add Site" ,  form = form ,user = user , mssg= " Something went wrong.")
+            return redirect(url_for('add')) 
+    return render_template('add.html', subtitle="Add Site",  user=user , form = form , sitelist = result)
+
+@lumber.route('/delete-site/<site>', methods=['GET', 'POST'])
+@login_required
+def delete_site(site):
+    site = site
+    print(site)
+    tablename = current_user.email
+    sql = text("delete from `"+tablename+"` WHERE site='"+site+"'")
+    result =engine.execute(sql)           
+    return redirect(url_for('add'))
 
 @lumber.route('/insights' ,methods=['GET', 'POST'])
 @login_required
@@ -90,6 +94,7 @@ def issues():
 def stream():
     user = current_user.username
     return render_template('stream.html' , subtitle = "Stream" ,  user = user)
+
 
 
 @lumber.route('/signup' , methods=['GET', 'POST'])

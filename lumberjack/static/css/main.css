@@ -1,12 +1,5 @@
-
-/* entypo */
-[class*="entypo-"]:before {
-  font-family: 'entypo', sans-serif;
-}
-
-
 body,html{
-	font-family: 'Inter UI', sans-serif !important;
+	font-family: 'Inter UI',Roboto, sans-serif !important;
 	height: 100% !important;
 }
 h2{
@@ -101,6 +94,12 @@ button{
 		font-weight: 600;
 		border-radius: 5px !important;
 		font-size: 20px !important;
+		box-shadow: 0px 0px 0px transparent;
+			transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+}
+button:hover{
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Forms */
@@ -177,3 +176,57 @@ border: 1px solid grey;
 	padding-left:50px;
 
 }
+
+/* Loader .loader class*/
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+
+$animation-duration: 1.8s;
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 10px;
+  background: #000;
+  border-radius: 5px;
+  animation: load $animation-duration ease-in-out infinite; 
+  &:before, &:after {
+    position: absolute; 
+    display: block;
+    content: "";
+    animation: load $animation-duration ease-in-out infinite;
+    height: 10px;
+    border-radius: 5px;
+  }
+    &:before {
+    top: -20px;
+    left: 10px;
+    width: 40px;
+    background: #000;
+  }
+  &:after {
+    bottom: -20px;
+    width: 35px;
+    background: #000; 
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: translateX(40px);
+  }
+  
+  50% {
+    transform: translateX(-30px);
+  }
+  100% {
+    transform: translateX(40px);
+  }
+}
+

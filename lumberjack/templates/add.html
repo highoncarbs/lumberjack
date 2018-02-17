@@ -1,35 +1,59 @@
 {% extends 'base.html' %}
 {% block content%}
-
-		<a id="showModal" href="/addsite" class="is-narrow ">
-		<div class="box animated fadeInUp">
-			<article class="media">
-				<div class="media-left">
-					<i data-feather="plus-square"></i>
-				</div>
-				<div class="media-left is-size-5">
-					<h2>Add your application.</h2>
-				</div>
-			</article>
-		</div>
+<div class="navbar ">
+<div class="navbar-start is-mobile">
+	<h2 class="is-size-3 has-text-black animated fadeIn">My Applications</h2>
+</div>
+<div class="navbar-end is-mobile">
+	<a id="showModal" href="/addsite" class="is-narrow animated fadeInRight">
+		<button class="button is-black">
+			<i data-feather="plus-square"></i>
+				<h2>Add your application</h2>
+		</button>
 	</a>
+</div>
+</div>	
 	<br>
 	<br>
-	<div class="list-info animated fadeIn">
-		<h2 class="is-size-4 ">My Applications</h2>
+	<div class="list-info animated fadeIn" >
+		
 		<br>
-		<table class="table">
+		{% for site in sitelist %}
+		<div class="columns is-narrow is-mobile">
+			<div class="column is-size-4">
+				<p class="has-text-grey-light" style="font-weight: 600;padding-left: 15px">{{site[0]}}</p>
+			</div>
+			<div class="column is-4 is-size-4 has-text-black" style="font-weight: 600;>
+				<p style="font-weight: 600;">{{site[1]}}</p>
+			</div>
+			<div class="column is-5 is-size-4 has-text-black" style="font-weight: 400;"">
+				<p>Some description; Linux</p>
+			</div>
+			<div class="column">
+				<a href="/delete-site/{{site[1]}}" class="site del"><i data-feather="trash"></i></a>
+			</div>
+			<div class="column">
+				<a href="/settings-site/{{site[1]}}" class="site"><i data-feather="settings"></i></a>
+			</div>
+		</div>
+		{% endfor %}
+
+
+
+		<!-- <table class="table">
 			<tbody class="is-size-4">
+    		{% for site in sitelist %}
     		<tr>
-    			<th class="has-text-grey-light">1</th>
-    			<td style="font-weight: 600;">gitlog.io</td>
+    			<th class="has-text-grey-light">{{site[0]}}</th>
+    			<td style="font-weight: 600;">{{site[1]}}</td>
     			<td>Shortt some name</td>
 
 				<td ><a href="" class="site"><i data-feather="trash"></i></a></td>
 				<td><a href="" class="site"><i data-feather="settings"></i></a>	</td>
 			</tr>
+			{% endfor %}
 			</tbody>
-		</table>
+		</table> -->
 	</div>
 
 <!-- Pop UP model -->
@@ -40,9 +64,9 @@
 	<p>Add the resource url of your application.Also add the streamign api in the app.</p>
 	<br>
 	<div class="box" >
-		<form action="/addsite" method="POST">
+		<form action="/add" method="POST">
 		{{ form.hidden_tag()}}
-		{{ form.name(class="is-fullwidth" , placeholder="Enter Name")}}
+		{{ form.name(class="is-fullwidth" , style="width:100%;", placeholder="Enter Name")}}
 		<!-- <input style="width:100%;
 	height:10%;
 	/*make input doesnt overflow inside div*/
@@ -82,6 +106,7 @@
     html.classList.remove('is-clipped');
   });
 });
+
 </script>
 
 <script type="text/javascript">
