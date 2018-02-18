@@ -2,6 +2,7 @@
 <img src="./assets/lumber.png"/>
 <br>
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 </p>
 
@@ -15,7 +16,7 @@ lumberjack automatically enhances your logs through our system . Converting them
  - Web Dashboard
  - Real time tailing
  - Fast Searching powered by Apache Solr
- - Keep logs for centuries ( on your disk. )
+ - Keep logs for centuries ( on your disk )
  - Save issues from logs to Github Repo
 
 ## Getting Started
@@ -35,4 +36,4 @@ The web dashboard is at `localhost:5000`
 
 ## License
 
-Lumberjack is licensed under GPL v3.0 License. See the [License](!./LICENSE) file for more info.
+Lumberjack is licensed under GPL v3.0 License. See the [License](/LICENSE) file for more info.
