@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, request, abort, url_for, g
+from flask import Flask, render_template, request, redirect, session, request, abort, url_for, g , flash
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -10,20 +10,30 @@ import MySQLdb
 from sqlalchemy.sql import text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+from celery import Celery 
+from werkzeug.utils import secure_filename
 
+# Flask app -> lumber init
 lumber = Flask(__name__)
 lumber.config.from_pyfile('config.py')
 
+# Celery init
+celery = Celery(lumber.name , broker = lumber.config['CELERY_BROKER_URL'])
+celery.conf.update(lumber.config)
+
+# SQLAlchemy init
 db = SQLAlchemy(lumber)
 engine = create_engine(
     'mysql+mysqldb://root:alpine@127.0.0.1/lumber')
 Base = declarative_base()
 
+# Flaks login init
 login_manager = LoginManager()
 login_manager.init_app(lumber)
 login_manager.login_view = 'login'
 
 
+# Root route
 @lumber.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -33,6 +43,10 @@ def index():
 
 @lumber.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Login route for Lumberjack
+
+    """
     form = LoginForm()
     mssg = ""
 
@@ -55,16 +69,26 @@ def login():
 def add():
     user = current_user.username
     form = AddSite()
+    upload_folder = "user_data/"+current_user.username 
     tablename = current_user.email
     sql = text("select id,site from `"+tablename+"`")
     result = engine.execute(sql)
     if form.validate_on_submit():
-            print("Boom")
-            new_site = form.name.data
-            tablename = current_user.email
-            sql = text("insert into `"+tablename+"` (site) values('"+new_site+"')")
-            result =engine.execute(sql)           
+        new_site = form.name.data
+        tablename = current_user.email
+        sql = text("insert into `"+tablename+"` (site) values('"+new_site+"')")
+        result =engine.execute(sql)
+        if file not in request.files:
+            flash('No file part')
             return redirect(url_for('add')) 
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(url_for('add'))
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join( upload_folder , filename))
+        return redirect(url_for('add')) 
     return render_template('add.html', subtitle="Add Site",  user=user , form = form , sitelist = result)
 
 @lumber.route('/delete-site/<site>', methods=['GET', 'POST'])
@@ -110,6 +134,8 @@ def signup():
             Base.metadata.create_all(engine)        
             db.session.add(new_user)
             db.session.commit()
+            user_dir = "user_data/"+form.username.data+"/"
+            ensure_dir(user_dir)
             return redirect(url_for('index'))
         else:
             return render_template('signup.html' , form = form ,subtitle = "Signup" ,error_mssg = "Email already exists.")
@@ -133,6 +159,21 @@ def logout():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Celery Jobs
+
+# Extra Functions 
+
+def ensure_dir(file_path):
+    """
+        Takes in file_path and checks for exsisting 
+        directory , if not creates one
+        INPUT : filepath
+    """
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+# Models 
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[InputRequired()])
