@@ -1,7 +1,111 @@
 {% extends 'base.html' %}
 {% block content%}
+<form method="POST" action="/insights">
+	{{ form.hidden_tag()}}
+<div class="noti-plus">
+	<div class="columns is-fullwidth">
+		<div class="column is-10">
+		<div class="control has-icons-left is-fullwidth">  
+		<!-- Set width to 100% -->
+		<div class="select is-medium is-fullwidth">
+			<select name="application-select" style="font-family: 'Inter UI',Roboto, sans-serif !important;">
+				<option selected>Select your Application</option>
+				<!-- List of applications -->
+				{% for site in sitelist %}
+				<option style="font-family: 'Inter UI',Roboto, sans-serif !important;">{{site[0]}}</option>
+				{% endfor %}
+				<!-- End of list loop -->
+			</select>
+		</div>
+		<span class="icon is-large is-left" style="margin-left: 10px;margin-right: 10px;">
+			<i data-feather="server"></i>
+		</span>
+		</div>
+		</div>
+		<div class="column is-2">
+			<button class="button is-black is-fullwidth">
+				<i data-feather="check"></i>
+					<h2>Submit</h2>
+			</button>	
+		</div>
+</div>
+</div>
+</form>
+
+<div class="insights-base">
+		{% if app_select %}
+				<h2 class="is-size-3 has-text-black animated fadeIn"><span class="has-text-grey">Analysis for :</span> {{app_select}}</h2>
+			<br>		
+		<div class="analysis-content">
+			<!-- Build Data cards here with britecharts and parse JSON result spark data -->
+				<div class="columns">
+					<div class="column is-5">
+						<div class="card is-size-5">
+							<div class="card-header">
+								<p class="card-header-title has-text-grey">
+									Frequently Accessed Pages
+								</p>
+							</div>
+							<div class="card-content">
+								<div class="content">
+									<div class="columns is-fullwidth is-2">
+										<div class="column is-10 has-text-grey">
+											Pages
+										</div>
+										<div class="column is-2 has-text-grey">
+											Count
+										</div>
+									</div>
+									{% for d in data %}
+									<div class="columns is-size-5 is-fullwidth">
+										<div class="column is-10">
+											{{d[1]}}
+										</div>
+										<div class="column is-2">
+											{{d[0]}}
+										</div>
+									</div>
+									{% endfor %}
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-7">
+						<div id="barContainer">
+						</div>
+					</div>
+			</div>
+
+		{% else %}
+		<div class="empty-info has-text-centered is-vcentered" style="padding-top: 150px;">
+			<div class="icon is-large">
+				<i data-feather="info"></i>
+			</div>
+			<p>	Please select the Application you want insights for<br>from the dropdown above and hit submit.</p>
+		</div>
+		{% endif %}
+		</div>
 
 <script type="text/javascript">
-	      document.getElementById('in-sec').classList.add("active");
+	document.getElementById('in-sec').classList.add("active");
+	const barChart = new britecharts.bar();
+	const { colorSchemas } = britecharts.colors;
+	const barContainer = d3.select('#barContainer');
+	const DATA = json.parse({{top_files}});
+	console.log(DATA);
+	draw();
+
+	function draw() {
+	    barChart
+	        .width(600)
+	        .height(300)
+	        .isAnimated(true)
+	        .colorSchema(colorSchemas.extendedPurpleColorSchema)
+	    
+	    barContainer.datum(DATA).call(barChart); 
+}
+
 </script>
+
 {% endblock %}

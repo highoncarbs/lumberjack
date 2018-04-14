@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import InputRequired, Email, Length
+from wtforms.validators import InputRequired, Email, Length , DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb
 from sqlalchemy.sql import text
@@ -12,6 +12,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from celery import Celery 
 from werkzeug.utils import secure_filename
+import json
+# Import Spark Engine 
+from engine import log_process
 
 # Flask app -> lumber init
 lumber = Flask(__name__)
@@ -32,6 +35,7 @@ login_manager = LoginManager()
 login_manager.init_app(lumber)
 login_manager.login_view = 'login'
 
+upload_path = u'/home/Padam/Documents/git/lumberjack/lumberjack/user_data/'
 
 # Root route
 @lumber.route('/', methods=['GET', 'POST'])
@@ -67,18 +71,23 @@ def login():
 @lumber.route('/add', methods=['GET', 'POST'])
 @login_required
 def add():
+    """
+    FIXME:  Upload Button icon not visible. 
+            File name not showing for uploaded file , fix using BulmaJS            
+    """
     user = current_user.username
     form = AddSite()
-    upload_folder = "user_data/"+current_user.username 
+    upload_folder = upload_path+current_user.username 
     tablename = current_user.email
-    sql = text("select id,site from `"+tablename+"`")
+    sql = text("select id,site_name,data_name from `"+tablename+"`")
     result = engine.execute(sql)
-    if form.validate_on_submit():
+
+    if form.validate_on_submit() and request.method == 'POST':
         new_site = form.name.data
         tablename = current_user.email
-        sql = text("insert into `"+tablename+"` (site) values('"+new_site+"')")
-        result =engine.execute(sql)
-        if file not in request.files:
+
+        # Field upload handling 
+        if 'file' not in request.files:
             flash('No file part')
             return redirect(url_for('add')) 
         file = request.files['file']
@@ -88,16 +97,24 @@ def add():
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join( upload_folder , filename))
-        return redirect(url_for('add')) 
+
+        # Database Insert handling
+
+            sql = text("insert into `"+tablename+"` (site_name , data_name) values('"+new_site+"' , '"+filename+"')")
+            result2 =engine.execute(sql)
+            
+            return redirect(url_for('add')) 
     return render_template('add.html', subtitle="Add Site",  user=user , form = form , sitelist = result)
 
 @lumber.route('/delete-site/<site>', methods=['GET', 'POST'])
 @login_required
 def delete_site(site):
+    """
+    FIXME: Delete log files along with site
+    """
     site = site
-    print(site)
     tablename = current_user.email
-    sql = text("delete from `"+tablename+"` WHERE site='"+site+"'")
+    sql = text("delete from `"+tablename+"` WHERE site_name='"+site+"'")
     result =engine.execute(sql)           
     return redirect(url_for('add'))
 
@@ -105,7 +122,45 @@ def delete_site(site):
 @login_required
 def insights():
     user = current_user.username
-    return render_template('insights.html' , subtitle = "Insights" ,  user = user)
+    tablename = current_user.email
+    sql = text("select site_name from `"+tablename+"`")
+    result = engine.execute(sql)
+    form = InsightSubmit()
+
+        
+    if form.validate_on_submit():
+        app_select = request.form.get('application-select')
+        sql = text("select data_name , result_name from `"+tablename+"` where site_name = '"+str(app_select)+"'")
+        data_file = engine.execute(sql).fetchone()
+        data_file = list(data_file)
+        
+        data_file = data_file[0]
+        data_file_path = upload_path+current_user.username+'/'+data_file 
+        result_file_path = upload_path+current_user.username+'/'+str(app_select)+'.json'
+        
+        if os.path.exists(result_file_path) :
+            result_file_path = upload_path+current_user.username+'/'+str(app_select)+'.json'
+            with open(result_file_path) as data_file:    
+                data = json.load(data_file)
+                clean_data = []
+                for j in data['top_10_pages']:
+                    clean_data.append([j['value'] , j['name']])
+                top_files = data['top_files']
+                top_ip = data['top_ip']
+            return render_template('insights.html' , subtitle = "Insights" ,  user = user , sitelist = result , form=form , app_select = app_select , data = clean_data , top_files = top_ip)
+
+        else:
+
+            # Calling Celery task 
+            task = log_process(data_file_path , result_file_path)
+            try:
+                sql = text("insert into `"+tablename+"` (result_name) values('"+str(app_select)+'.txt'+"') where site_name = '"+app_select+"'")
+                result3 =engine.execute(sql)
+            except Exception:
+                print('Unable to save result path into database')
+
+            return render_template('insights.html' , subtitle = "Insights" ,  user = user , sitelist = result , form=form , app_select = app_select , data = data_file)
+    return render_template('insights.html' , subtitle = "Insights" ,  user = user , sitelist = result , form = form)
 
 @lumber.route('/issues' ,methods=['GET', 'POST'])
 @login_required
@@ -172,6 +227,7 @@ def ensure_dir(file_path):
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
+        print('Ohhh')
 
 # Models 
 
@@ -197,8 +253,9 @@ def UserTableCreator(tablename):
     class UserTable(Base):
         __tablename__ = tablename
         id = db.Column(db.Integer , primary_key = True)
-        site = db.Column(db.String(80) , default = None)
-
+        site_name = db.Column(db.String(80) , default = None)
+        data_name = db.Column(db.String(80) , default = None)
+        result_name = db.Column(db.String(80) , default = None)
         def __init__(self, site=None):
             self.site = db.Column(db.String(80))
 
@@ -207,3 +264,8 @@ def UserTableCreator(tablename):
 class AddSite(FlaskForm):
     name = StringField('name' , validators= [InputRequired()] )
     # Need to check and add more
+
+class InsightSubmit(FlaskForm):
+    # form_name = HiddenField('Form Name')
+    # select_temp = SelectField('applications' , validators = [DataRequired()])
+    pass

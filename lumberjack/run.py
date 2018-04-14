@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from lumber import *
 
 if __name__ == "__main__":

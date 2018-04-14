@@ -8,9 +8,12 @@
 	{% endif %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static' , filename = 'css/main.css') }}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/britecharts/dist/css/britecharts.min.css" type="text/css" />
  <link rel="stylesheet" href="https://rsms.me/inter/inter-ui.css">	  
  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.4/d3.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/britecharts@1/dist/bundled/britecharts.min.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
@@ -23,10 +26,10 @@
 			</div>
 			<div class="menu sidenav is is-size-4">
 				<ul class="menu-list animated fadeIn">
-					<li id="ad-sec"><a href="{{ url_for('add') }}"><i data-feather="plus-square"></i><span class="menu-text">Add Site</span></a></li>
-					<li id="in-sec"><a href="{{ url_for('insights') }}"><i data-feather="zap"></i><span class="menu-text">Insights</span></a></li>
-					<li id="is-sec"><a href="{{ url_for('issues') }}"><i data-feather="alert-octagon"></i><span class="menu-text"><span class="menu-text">Issues</span></a></li>
-					<li id="st-sec"><a href="{{ url_for('stream') }}"><i data-feather="bar-chart-2"></i><span class="menu-text">Stream</span></a></li>
+					<li id="ad-sec"><a href="{{ url_for('add') }}"><i data-feather="plus-square"></i><span class="menu-text is-desktop">Add Site</span></a></li>
+					<li id="in-sec"><a href="{{ url_for('insights') }}"><i data-feather="zap"></i><span class="menu-text is-desktop">Insights</span></a></li>
+					<li id="is-sec"><a href="{{ url_for('issues') }}"><i data-feather="alert-octagon"></i><span class="menu-text is-desktop"><span class="menu-text">Issues</span></a></li>
+					<li id="st-sec"><a href="{{ url_for('stream') }}"><i data-feather="bar-chart-2"></i><span class="menu-text is-desktop">Stream</span></a></li>
 				</ul>
 			</div>
 			<div class="menu-btm is-fixed-bottom animated fadeInUp ">
