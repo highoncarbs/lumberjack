@@ -1,13 +1,13 @@
 import os
 import sys 
-import redis
-from celery import Celery
-from celery.result import AsyncResult
+# import redis
+# from celery import Celery
+# from celery.result import AsyncResult
 from pyspark import SparkContext
 from pyspark.sql import SparkSession , SQLContext
 import json 
 
-celery = Celery("lumberjack" , broker = 'redis://localhost:6379/0')
+# celery = Celery("lumberjack" , broker = 'redis://localhost:6379/0')
 
 sc = SparkContext()
 sc.setLogLevel("WARN")
@@ -15,11 +15,13 @@ sqlcontext = SQLContext(sc)
 
 # Celery Task
 
-@celery.task(bind=True)
-def log_process(self , filepath , resultpath):
-	task_id = self.request.id 
-	filepath = filepath
-	resultpath = resultpath
+# @celery.task(bind=True)
+def log_process(data_file_path , result_file_path):
+
+	print("Inside the log procress")
+	# task_id = self.request.id 
+	filepath = data_file_path 
+	resultpath =   result_file_path
 	log_file = sqlcontext.read.text(filepath)
 
 	# Data Clean , Later refactor the code for Celery
@@ -41,6 +43,8 @@ def log_process(self , filepath , resultpath):
 
 	from pyspark.sql.functions import desc
 
+	# Getting the Error Log lines 
+
 	# Top Accessed files 
 
 	top_files = cleaned_df.groupby("path").count().sort(desc("count")).take(10)
@@ -48,7 +52,8 @@ def log_process(self , filepath , resultpath):
 	# Frequently Accessed html pages
 
 	top_pages = cleaned_df.filter(cleaned_df["path"].rlike('html'))
-	top_10_pages = top_pages.groupby('path').count().sort(desc('count')).take(10)
+	top_10_pages = top_pages.groupby('path').count().sort(desc('count')).take(1)
+     
 
 	# Top IP hits
 	top_ip = cleaned_df.groupby("host").count().sort(desc('count')).take(10)
@@ -75,10 +80,13 @@ def log_process(self , filepath , resultpath):
 		'name' : row['host'],
 		'value' : row['count']
 		})
-
+    
 
 	with open(resultpath, 'w') as outfile:  
 		json.dump(data, outfile)
 		print('Success')
 
 	return('Success')
+
+if __name__ == "__main__":
+	log_process()

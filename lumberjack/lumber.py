@@ -27,7 +27,7 @@ celery.conf.update(lumber.config)
 # SQLAlchemy init
 db = SQLAlchemy(lumber)
 engine = create_engine(
-    'mysql+mysqldb://root:alpine@127.0.0.1/lumber')
+    'mysql+mysqldb://root@127.0.0.1/lumber')
 Base = declarative_base()
 
 # Flaks login init
@@ -35,7 +35,7 @@ login_manager = LoginManager()
 login_manager.init_app(lumber)
 login_manager.login_view = 'login'
 
-upload_path = u'/home/Padam/Documents/git/lumberjack/lumberjack/user_data/'
+upload_path = os.path.abspath('./user_data/')
 
 # Root route
 @lumber.route('/', methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def login():
     mssg = ""
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.email.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
@@ -77,7 +77,7 @@ def add():
     """
     user = current_user.username
     form = AddSite()
-    upload_folder = upload_path+current_user.username 
+    upload_folder = upload_path 
     tablename = current_user.email
     sql = text("select id,site_name,data_name from `"+tablename+"`")
     result = engine.execute(sql)
@@ -96,7 +96,9 @@ def add():
             return redirect(url_for('add'))
         if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join( upload_folder , filename))
+            file_temp = os.path.join( upload_folder, filename) 
+
+            file.save(file_temp)
 
         # Database Insert handling
 
@@ -135,11 +137,11 @@ def insights():
         data_file = list(data_file)
         
         data_file = data_file[0]
-        data_file_path = upload_path+current_user.username+'/'+data_file 
-        result_file_path = upload_path+current_user.username+'/'+str(app_select)+'.json'
+        data_file_path = upload_path+'/'+data_file 
+        result_file_path = upload_path+'/'+str(app_select)+'.json'
         
         if os.path.exists(result_file_path) :
-            result_file_path = upload_path+current_user.username+'/'+str(app_select)+'.json'
+            result_file_path = upload_path+'/'+str(app_select)+'.json'
             with open(result_file_path) as data_file:    
                 data = json.load(data_file)
                 clean_data = []
