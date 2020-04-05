@@ -6,7 +6,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import InputRequired, Email, Length , DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
-import MySQLdb
 from sqlalchemy.sql import text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -27,7 +26,7 @@ celery.conf.update(lumber.config)
 # SQLAlchemy init
 db = SQLAlchemy(lumber)
 engine = create_engine(
-    'mysql+mysqldb://root@127.0.0.1/lumber')
+    'mysql+pymysql://root@127.0.0.1/lumber')
 Base = declarative_base()
 
 # Flaks login init
